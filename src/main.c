@@ -11,24 +11,40 @@ int main(int argc, char ** argv) {
 	Matrix * b = readFromFile(argv[2]);
 	Matrix * x;
 
-	if (A == NULL) return -1;
-	if (b == NULL) return -2;
+	if (A == NULL){
+		fprintf(stderr, "Blad wczytania macierzy A.\n");
+		return -1;
+	}
+
+	if (b == NULL){
+	       	fprintf(stderr, "Blad wczytania macierzy A.\n");
+		return -2;
+	}
+
 	printToScreen(A);
 	printToScreen(b);
 
 	res = eliminate(A,b);
-	x = createMatrix(b->r, 1);
-	if (x != NULL) {
-		res = backsubst(x,A,b);
+	if (res == 0){
+		x = createMatrix(b->r, 1);
 
-		printToScreen(x);
-	  freeMatrix(x);
+		if (x != NULL) {
+			res = backsubst(x,A,b);
+			if (res == 0) {
+				printToScreen(x);
+		  		freeMatrix(x);
+			} else {
+				fprintf(stderr, "Błąd! Wsteczne podstawienie zakończone niepowodzeniem.\n");
+			}
+		}else{
+			fprintf(stderr,"Błąd! Nie mogłem utworzyć wektora wynikowego x.\n");
+		}
 	} else {
-					fprintf(stderr,"Błąd! Nie mogłem utworzyć wektora wynikowego x.\n");
+		fprintf(stderr, "Błąd! Eliminacja zakończona niepowodzeniem.\n");
 	}
 
 	freeMatrix(A);
 	freeMatrix(b);
 
-	return 0;
+	return res;
 }
