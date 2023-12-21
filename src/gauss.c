@@ -1,5 +1,6 @@
 #include "gauss.h"
 #include <math.h>
+#include <stdio.h>
 /**
  * Zwraca 0 - elimnacja zakonczona sukcesem
  * Zwraca 1 - macierz osobliwa - dzielenie przez 0
@@ -8,6 +9,11 @@
 int eliminate(Matrix *mat, Matrix *b) {
     int i, j, k, maxRow;
     double maxElem, temp;
+
+if (mat->r != mat->c || mat->r != b->r || b->c != 1) {
+        fprintf(stderr, "Błąd nieprawidłowych rozmiarów macierzy\n");
+	return 2;
+    }
 
     for (i = 0; i < mat->r - 1; i++) {
         maxRow = i;
