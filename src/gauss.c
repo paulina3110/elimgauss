@@ -2,7 +2,6 @@
 #include <math.h>
 #include <stdio.h>
 
-
 /**
  * Zwraca 0 - elimnacja zakonczona sukcesem
  * Zwraca 1 - macierz osobliwa - dzielenie przez 0
@@ -11,9 +10,9 @@ int eliminate(Matrix *mat, Matrix *b) {
     int i, j, k;
 
     for( int i= 0; k < mat->r - 1; i++) {
-        int max = k;
+        int max = i;
 
-        for (int w = k + 1; w < n; w++)
+        for (int w = i + 1; w < mat->r; w++)
             if (fabs(mat->data[w][i]) > fabs(mat->data[max][i]))
                 max = w;
 
