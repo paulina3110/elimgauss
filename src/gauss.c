@@ -1,28 +1,33 @@
 #include "gauss.h"
 #include <math.h>
-#include <stdio.h>
-
 /**
  * Zwraca 0 - elimnacja zakonczona sukcesem
  * Zwraca 1 - macierz osobliwa - dzielenie przez 0
  */
+
 int eliminate(Matrix *mat, Matrix *b) {
-    int i, j, k;
+    int i, j, k, maxRow;
+    double maxElem, temp;
 
-    for(i= 0; k < mat->r - 1; i++) {
-        int max = i;
+    for (i = 0; i < mat->r - 1; i++) {
+        maxRow = i;
+        maxElem = fabs(mat->data[i][i]);
+        for (k = i + 1; k < mat->r; k++) {
+            if (fabs(mat->data[k][i]) > maxElem) {
+                maxElem = fabs(mat->data[k][i]);
+                maxRow = k;
+            }
+        }
 
-        for (int w = i + 1; w < mat->r; w++)
-            if (fabs(mat->data[w][i]) > fabs(mat->data[max][i]))
-                max = w;
-
-        if (max != i) {
-            double *tmp = mat->data[i];
-            mat->data[i] = mat->data[max];
-            mat->data[max] = tmp;
-            double bt = b->data[max][0];
-            b->data[max][0] = b->data[i][0];
-            b->data[i][0] = bt;
+        if (maxRow != i) {
+            for (j = i; j < mat->c; j++) {
+                temp = mat->data[i][j];
+                mat->data[i][j] = mat->data[maxRow][j];
+                mat->data[maxRow][j] = temp;
+            }
+            temp = b->data[i][0];
+            b->data[i][0] = b->data[maxRow][0];
+            b->data[maxRow][0] = temp;
         }
 
         for (k = i + 1; k < mat->r; k++) {
@@ -32,12 +37,13 @@ int eliminate(Matrix *mat, Matrix *b) {
             }
             b->data[k][0] -= factor * b->data[i][0];
         }
-        for (i = 0; i < mat->r; i++) {
-            if (fabs(mat->data[i][i]) < 1e-10) {
-                fprintf(stderr, "Macierz osobliwa, dzielenie przez 0\n");
-                return 1;
-            }
+    }
+
+    for (i = 0; i < mat->r; i++) {
+        if (fabs(mat->data[i][i]) < 1e-10) {
+            return 1;
         }
     }
+
     return 0;
 }
