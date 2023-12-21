@@ -9,7 +9,7 @@
 int eliminate(Matrix *mat, Matrix *b) {
     int i, j, k;
 
-    for( int i= 0; k < mat->r - 1; i++) {
+    for(i= 0; k < mat->r - 1; i++) {
         int max = i;
 
         for (int w = i + 1; w < mat->r; w++)
